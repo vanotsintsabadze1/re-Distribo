@@ -1,0 +1,31 @@
+interface User {
+  id: string;
+  email: string;
+  emailConfirmed: boolean;
+  company: {
+    id: string;
+    name: string;
+    address: string;
+    phone: string;
+    email: string;
+  };
+  role: {
+    name: string;
+  };
+}
+
+interface ResponseError {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  instance?: string;
+  code?: string;
+  traceId?: string;
+}
+
+interface ResponseCheckerPayload<T> {
+  status: number;
+  type: 0 | 1 | 2;
+  data: T | ResponseError;
+}
