@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { mainFont } from "@/config/fontConfiguration";
+import AuthenticationContextProvider from "@/context/AuthenticationContext";
 
 export const metadata: Metadata = {
   title: "Distribo",
@@ -16,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${mainFont.className} antialiased flex min-h-dvh`}>
-        {children}
+        <AuthenticationContextProvider>{children}</AuthenticationContextProvider>
         <Toaster position="top-center" containerStyle={{ fontSize: "12px", textAlign: "center" }} />
       </body>
     </html>

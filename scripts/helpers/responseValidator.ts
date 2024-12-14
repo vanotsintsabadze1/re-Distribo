@@ -1,7 +1,7 @@
 import { HttpStatusTypes } from "@/config/constants";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function responseValidator<T>(status: number, data: any): ResponseCheckerPayload<T | ResponseError> {
+export function responseValidator<T>(status: number, data?: any): ResponseCheckerPayload<T | ResponseError> {
   if (status >= 200 && status < 300) {
     return { status: status, type: HttpStatusTypes.Success, data: data as T };
   }

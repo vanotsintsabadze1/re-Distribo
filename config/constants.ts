@@ -5,3 +5,9 @@ export enum HttpStatusTypes {
   ClientError,
   InternalServerError,
 }
+
+export enum UserRole {
+  User = "RootUser",
+  Employee = "Employee",
+  Admin = "Admin",
+}

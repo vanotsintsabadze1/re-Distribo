@@ -17,3 +17,18 @@ export async function getProducts() {
     return await axiosErrorHandler(error);
   }
 }
+
+export async function deleteProduct(id: string) {
+  try {
+    const res = await axiosService.delete(`/v1/Product/${id}`, {
+      requiresAuth: true,
+      hasDefaultHeaders: true,
+    });
+
+    const validatedResponse = responseValidator<Product>(res.status);
+
+    return validatedResponse;
+  } catch (error) {
+    return await axiosErrorHandler(error);
+  }
+}

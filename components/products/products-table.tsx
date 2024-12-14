@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import { MoreHorizontal, ArrowUpDown, Search } from "lucide-react";
+import { ArrowUpDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import ProductTableItemActions from "./product-table-item-actions";
+import { useState } from "react";
 
 interface Props {
   products: Product[];
@@ -14,7 +14,6 @@ interface Props {
 
 export default function ProductTable({ products }: Props) {
   const [searchTerm, setSearchTerm] = useState("");
-
   const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
@@ -67,19 +66,7 @@ export default function ProductTable({ products }: Props) {
               <TableCell className="text-xs">${product.price.toFixed(2)}</TableCell>
               <TableCell className="text-xs">{product.stock}</TableCell>
               <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="text-xs cursor-pointer">Edit</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-xs text-red-600 cursor-pointer">Delete</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <ProductTableItemActions itemId={product.id} />
               </TableCell>
             </TableRow>
           ))}

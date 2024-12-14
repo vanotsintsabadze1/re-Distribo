@@ -10,7 +10,7 @@ interface User {
     email: string;
   };
   role: {
-    name: string;
+    name: "RootUser" | "Employee" | "Admin";
   };
 }
 
