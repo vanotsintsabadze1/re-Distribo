@@ -11,8 +11,8 @@ const allowedEndpointsForUnauthorizedUsers = ["/auth/login"];
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
-  const user = await getCurrentUser();
-  const userIsValid = "id" in user.data;
+  const user = token && (await getCurrentUser());
+  const userIsValid = user && "id" in user.data;
 
   if (!token && !allowedEndpointsForUnauthorizedUsers.includes(request.nextUrl.pathname)) {
     return redirect(request, "/auth/login");

@@ -55,3 +55,8 @@ export async function login(payload: UserLoginRequest): Promise<ResponseCheckerP
     return await axiosErrorHandler(error);
   }
 }
+
+export async function logout() {
+  const cookieStore = await cookies();
+  cookieStore.delete("token");
+}

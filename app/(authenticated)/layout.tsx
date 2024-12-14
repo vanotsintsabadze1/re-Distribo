@@ -1,10 +1,10 @@
 import Sidebar from "@/components/ui/sidebar";
 
-interface Props {
+export default function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
-
-export function AuthenticatedPagesLayout({ children }: Props) {
+}>) {
   return (
     <>
       <Sidebar />
