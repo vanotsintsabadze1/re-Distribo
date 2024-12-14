@@ -32,3 +32,19 @@ export async function deleteProduct(id: string) {
     return await axiosErrorHandler(error);
   }
 }
+
+export async function createProduct(formData: FormData) {
+  try {
+    const res = await axiosService.post("/v1/Product", formData, {
+      requiresAuth: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const validatedResponse = responseValidator<Product>(res.status);
+    return validatedResponse;
+  } catch (error) {
+    return await axiosErrorHandler(error);
+  }
+}

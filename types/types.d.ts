@@ -45,3 +45,19 @@ interface Product {
     url: string;
   }[];
 }
+
+interface ProductCreationRequest {
+  Name: string;
+  Description: string;
+  Price: number;
+  Stock: number;
+  ImageFiles: File[];
+}
+
+interface ProductCreationRequestSchema {
+  Name: string;
+  Description: string;
+  Price: string;
+  Stock: string;
+  ImageFiles: string;
+}

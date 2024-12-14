@@ -51,7 +51,6 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
 
     if (res.type === HttpStatusTypes.InternalServerError) {
       toast.error("Something went wrong. Please contact support");
-      console.log(res.data);
       return;
     }
   }
