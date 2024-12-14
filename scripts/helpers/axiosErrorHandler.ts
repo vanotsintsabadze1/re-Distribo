@@ -15,17 +15,27 @@ export async function axiosErrorHandler(error: unknown): Promise<ResponseChecker
   };
 
   if (axiosError.request) {
+    const status = axiosError.status;
     console.log("-----------------");
     console.error(`Error happened while sending a request:`);
     console.error("Message: ", axiosError.message);
     console.error("Status:", axiosError.status);
-    console.error("Stack", axiosError.stack);
+    console.error("Stack: ", axiosError.stack);
     console.log("-----------------");
-    return { status: HttpStatusCode.InternalServerError, type: HttpStatusTypes.InternalServerError, data: unexpectedError };
+    return {
+      status: axiosError.status ?? 500,
+      type: status
+        ? status >= 400 && status < 500
+          ? HttpStatusTypes.ClientError
+          : HttpStatusTypes.InternalServerError
+        : HttpStatusTypes.InternalServerError,
+      data: unexpectedError,
+    };
   }
 
   if (axiosError.response) {
     const response = axiosError.response;
+
     console.error(`Error happened while receiving a response:`);
     console.error(`Code: ${response.status}`);
     console.error(`Title: ${response.statusText}`);

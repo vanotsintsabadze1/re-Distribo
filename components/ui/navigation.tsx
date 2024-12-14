@@ -1,13 +1,7 @@
-import {
-  ArrowLeft,
-  Building2,
-  ListOrdered,
-  LogOutIcon,
-  Package,
-  Users,
-} from "lucide-react";
+import { ArrowLeft, Building2, ListOrdered, Package, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import LogoutButton from "../auth/logout-button";
 
 interface Props {
   setBurgerMenu?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,10 +33,7 @@ export default function Navigation({ setBurgerMenu }: Props) {
           <ListOrdered size={15} />
           <Link href={"/orders"}>Orders</Link>
         </button>
-        <button className="flex whitespace-nowrap gap-x-2 hover:bg-gray-200 rounded-md duration-100 ease-in-out py-2 md:p-2 md:text-black text-white">
-          <LogOutIcon size={15} />
-          <span>Log out</span>
-        </button>
+        <LogoutButton />
       </nav>
     </>
   );
