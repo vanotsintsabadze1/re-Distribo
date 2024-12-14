@@ -54,8 +54,9 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
     const res = await createProduct(formData);
 
     if (res.type === HttpStatusTypes.Success) {
-      router.refresh();
+      setProduct({ Name: "", Description: "", Price: 0, Stock: 0, ImageFiles: [] });
       toast.success("Product created successfully");
+      router.refresh();
       setOpen(false);
       return;
     }
