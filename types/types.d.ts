@@ -34,3 +34,14 @@ interface UserLoginRequest {
   email: string;
   password: string;
 }
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  images: {
+    url: string;
+  }[];
+}

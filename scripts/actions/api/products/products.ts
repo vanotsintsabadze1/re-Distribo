@@ -1,0 +1,19 @@
+"use server";
+
+import { axiosService } from "@/config/axiosConfiguration";
+import { axiosErrorHandler } from "@/scripts/helpers/axiosErrorHandler";
+import { responseValidator } from "@/scripts/helpers/responseValidator";
+
+export async function getProducts() {
+  try {
+    const res = await axiosService.get("/v1/Product", {
+      requiresAuth: true,
+      hasDefaultHeaders: true,
+    });
+
+    const validatedResponse = responseValidator<Product[]>(res.status, res.data);
+    return validatedResponse;
+  } catch (error) {
+    return await axiosErrorHandler(error);
+  }
+}
