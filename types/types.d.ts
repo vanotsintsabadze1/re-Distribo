@@ -29,3 +29,8 @@ interface ResponseCheckerPayload<T> {
   type: 0 | 1 | 2;
   data: T | ResponseError;
 }
+
+interface UserLoginRequest {
+  email: string;
+  password: string;
+}
