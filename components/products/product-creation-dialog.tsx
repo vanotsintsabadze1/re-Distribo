@@ -89,7 +89,9 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
         <CardContent>
           <form onSubmit={handleCreateProduct} ref={formRef} className="flex flex-col gap-y-4">
             <ProductCreationFormFields errors={errorSubjects} images={product.ImageFiles} setProduct={setProduct} setImageUrls={setImageUrls} />
-            {product.ImageFiles.length > 0 && <ProductCreationImagePreviews imageUrls={imageUrls} />}
+            {product.ImageFiles.length > 0 && (
+              <ProductCreationImagePreviews setProduct={setProduct} setImageUrls={setImageUrls} imageUrls={imageUrls} />
+            )}
             <div className="flex flex-col gap-y-2">
               <Button variant={"default"} type="submit" className="w-full text-xs h-8">
                 Create

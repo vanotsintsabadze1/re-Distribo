@@ -2,6 +2,7 @@ import { Upload } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import toast from "react-hot-toast";
 
 interface Props {
   images: File[];
@@ -19,11 +20,20 @@ export default function ProductCreationFormFields({ images, errors, setProduct, 
     images.forEach((file) => newFiles.items.add(file));
 
     imageFilesInputRef.current!.files = newFiles.files;
+
+    return () => newFiles.items.clear();
   }, [images]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) {
       return;
+    }
+
+    for (const file of Array.from(e.target.files)) {
+      if (file.size > 1024 * 1024 * 2) {
+        toast.error("File size should be less than 2MB");
+        return;
+      }
     }
 
     const files = Array.from(e.target.files);
@@ -102,6 +112,7 @@ export default function ProductCreationFormFields({ images, errors, setProduct, 
           name="ImageFiles"
           multiple
           id="ImageFiles"
+          accept="image/*"
           ref={imageFilesInputRef}
           onChange={handleUpload}
         />

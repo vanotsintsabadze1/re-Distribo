@@ -132,7 +132,9 @@ export default function ProductEditingDialog({ product: initProduct, open, setOp
               defaultProductDetails={product}
               setProduct={setProduct}
             />
-            {product.ImageFiles.length > 0 && <ProductCreationImagePreviews imageUrls={imageUrls} />}
+            {product.ImageFiles.length > 0 && (
+              <ProductCreationImagePreviews setProduct={setProduct} imageUrls={imageUrls} setImageUrls={setImageUrls} />
+            )}
             <div className="flex flex-col gap-y-2">
               <Button variant={"default"} type="submit" className="w-full text-xs h-8">
                 Edit
