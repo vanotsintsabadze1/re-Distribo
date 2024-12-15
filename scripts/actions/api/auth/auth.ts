@@ -33,6 +33,7 @@ export async function login(payload: UserLoginRequest): Promise<ResponseCheckerP
       { email: payload.email, password: payload.password },
       {
         hasDefaultHeaders: true,
+        cache: false,
       }
     );
 

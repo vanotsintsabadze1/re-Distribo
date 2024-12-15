@@ -8,6 +8,7 @@ export async function getProducts() {
   try {
     const res = await axiosService.get("/v1/Product", {
       requiresAuth: true,
+      cache: false,
       hasDefaultHeaders: true,
     });
 
@@ -22,6 +23,7 @@ export async function deleteProduct(id: string) {
   try {
     const res = await axiosService.delete(`/v1/Product/${id}`, {
       requiresAuth: true,
+      cache: false,
       hasDefaultHeaders: true,
     });
 
@@ -37,6 +39,7 @@ export async function createProduct(formData: FormData) {
   try {
     const res = await axiosService.post("/v1/Product", formData, {
       requiresAuth: true,
+      cache: false,
       headers: {
         "Content-Type": "multipart/form-data",
       },
