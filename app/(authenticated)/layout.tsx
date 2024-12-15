@@ -1,3 +1,4 @@
+import NavigationBar from "@/components/navigation/navigation-bar";
 import Sidebar from "@/components/ui/sidebar";
 
 export default function RootLayout({
@@ -8,7 +9,10 @@ export default function RootLayout({
   return (
     <>
       <Sidebar />
-      <main className="flex-grow min-h-dvh">{children}</main>
+      <main className="flex-grow min-h-dvh flex flex-col">
+        <NavigationBar />
+        {children}
+      </main>
     </>
   );
 }

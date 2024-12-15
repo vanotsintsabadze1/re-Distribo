@@ -10,7 +10,7 @@ interface User {
     email: string;
   };
   role: {
-    name: string;
+    name: "RootUser" | "Employee" | "Admin";
   };
 }
 
@@ -33,4 +33,31 @@ interface ResponseCheckerPayload<T> {
 interface UserLoginRequest {
   email: string;
   password: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  images: {
+    url: string;
+  }[];
+}
+
+interface ProductCreationRequest {
+  Name: string;
+  Description: string;
+  Price: number;
+  Stock: number;
+  ImageFiles: File[];
+}
+
+interface ProductCreationRequestSchema {
+  Name: string;
+  Description: string;
+  Price: string;
+  Stock: string;
+  ImageFiles: string;
 }
