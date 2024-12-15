@@ -9,9 +9,7 @@ const instance = axios.create({
   baseURL: API_URL,
 });
 
-export const axiosService = setupCache(instance, {
-  ttl: 0,
-});
+export const axiosService = setupCache(instance);
 
 export async function invalidateCache(id: string) {
   axiosService.storage.remove(id);
