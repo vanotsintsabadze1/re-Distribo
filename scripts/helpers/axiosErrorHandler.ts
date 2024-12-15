@@ -25,7 +25,7 @@ export async function axiosErrorHandler(error: unknown): Promise<ResponseChecker
     return {
       status: axiosError.response.status,
       type: response.status >= 400 && response.status < 500 ? HttpStatusTypes.ClientError : HttpStatusTypes.InternalServerError,
-      data: axiosError.response.data as ResponseError,
+      data: response.data ? (response.data as ResponseError) : unexpectedError,
     };
   }
 
