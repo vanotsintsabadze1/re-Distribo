@@ -48,3 +48,20 @@ export async function createProduct(formData: FormData) {
     return await axiosErrorHandler(error);
   }
 }
+
+export async function editProduct(id: string, formData: FormData) {
+  try {
+    const res = await axiosService.put(`/v1/Product/${id}`, formData, {
+      cache: false,
+      requiresAuth: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const validatedResponse = responseValidator(res.status);
+    return validatedResponse;
+  } catch (error) {
+    return await axiosErrorHandler(error);
+  }
+}

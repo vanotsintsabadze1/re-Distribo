@@ -1,4 +1,5 @@
 import { Upload } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
@@ -6,9 +7,33 @@ interface Props {
   images: File[];
   errors: ProductCreationRequestSchema;
   setProduct: React.Dispatch<React.SetStateAction<ProductCreationRequest>>;
+  setImageUrls: React.Dispatch<React.SetStateAction<string[]>>;
+  defaultProductDetails?: ProductCreationRequest;
 }
 
-export default function ProductCreationFormFields({ images, errors, setProduct }: Props) {
+export default function ProductCreationFormFields({ images, errors, setProduct, setImageUrls, defaultProductDetails }: Props) {
+  const imageFilesInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const newFiles = new DataTransfer();
+    images.forEach((file) => newFiles.items.add(file));
+
+    imageFilesInputRef.current!.files = newFiles.files;
+  }, [images]);
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) {
+      return;
+    }
+
+    const files = Array.from(e.target.files);
+    const combinedFileArray = [...images, ...files];
+    const urls = combinedFileArray.map((file) => URL.createObjectURL(file));
+
+    setImageUrls(urls);
+    setProduct((prev) => ({ ...prev, ImageFiles: combinedFileArray }));
+  }
+
   return (
     <>
       <div>
@@ -20,6 +45,7 @@ export default function ProductCreationFormFields({ images, errors, setProduct }
           name="Name"
           onChange={(e) => setProduct((prev) => ({ ...prev, Name: e.target.value }))}
           error={errors.Name}
+          defaultValue={defaultProductDetails?.Name ?? ""}
         />
       </div>
       <div>
@@ -31,6 +57,7 @@ export default function ProductCreationFormFields({ images, errors, setProduct }
           name="Description"
           onChange={(e) => setProduct((prev) => ({ ...prev, Description: e.target.value }))}
           error={errors.Description}
+          defaultValue={defaultProductDetails?.Description ?? ""}
         />
       </div>
       <div>
@@ -43,6 +70,7 @@ export default function ProductCreationFormFields({ images, errors, setProduct }
           name="Price"
           onChange={(e) => setProduct((prev) => ({ ...prev, Price: e.target.value as unknown as number }))}
           error={errors.Price}
+          defaultValue={defaultProductDetails?.Price ?? 0}
         />
       </div>
       <div>
@@ -55,6 +83,7 @@ export default function ProductCreationFormFields({ images, errors, setProduct }
           name="Stock"
           onChange={(e) => setProduct((prev) => ({ ...prev, Stock: e.target.value as unknown as number }))}
           error={errors.Stock}
+          defaultValue={defaultProductDetails?.Stock ?? 0}
         />
       </div>
       <div>
@@ -73,15 +102,8 @@ export default function ProductCreationFormFields({ images, errors, setProduct }
           name="ImageFiles"
           multiple
           id="ImageFiles"
-          onChange={(e) => {
-            if (!e.currentTarget.files || !e.target.files) {
-              return;
-            }
-            const files = Array.from(e.target.files);
-            const combinedFileArray = [...images, ...files];
-
-            setProduct((prev) => ({ ...prev, ImageFiles: combinedFileArray }));
-          }}
+          ref={imageFilesInputRef}
+          onChange={handleUpload}
         />
       </div>
     </>

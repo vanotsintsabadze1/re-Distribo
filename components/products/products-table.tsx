@@ -66,13 +66,13 @@ export default function ProductTable({ products }: Props) {
             {filteredProducts.map((product) => (
               <TableRow key={product.id}>
                 <TableCell>
-                  <Image src={product.images[0].url} alt={product.name} width={50} height={50} className="rounded-md object-cover" />
+                  <Image src={product.images[0].url} alt={product.name} width={50} height={50} className="rounded-md object-contain" />
                 </TableCell>
                 <TableCell className="font-medium text-xs">{product.name}</TableCell>
                 <TableCell className="text-xs">${product.price.toFixed(2)}</TableCell>
                 <TableCell className="text-xs">{product.stock}</TableCell>
                 <TableCell className="text-right">
-                  <ProductTableItemActions itemId={product.id} />
+                  <ProductTableItemActions product={product} />
                 </TableCell>
               </TableRow>
             ))}

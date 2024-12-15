@@ -4,9 +4,9 @@ import { validationErrorAssigner } from "@/scripts/helpers/validationErrorAssign
 import { productSchema } from "@/types/validators/productValidator";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import toast from "react-hot-toast";
 import CustomDialog from "../ui/custom-dialog";
 import ProductCreationFormFields from "./product-creation-form-fields";
 import ProductCreationImagePreviews from "./product-creation-image-previews";
@@ -27,6 +27,7 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
 
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   // Since our custom approach needs every property to be a string we need to create a new instance.
   // While a better approach is to not end up in this situation, this is a quick and probably the only time, except editing where we're going to need it.
@@ -87,8 +88,8 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreateProduct} ref={formRef} className="flex flex-col gap-y-4">
-            <ProductCreationFormFields errors={errorSubjects} images={product.ImageFiles} setProduct={setProduct} />
-            {product.ImageFiles.length > 0 && <ProductCreationImagePreviews images={product.ImageFiles} />}
+            <ProductCreationFormFields errors={errorSubjects} images={product.ImageFiles} setProduct={setProduct} setImageUrls={setImageUrls} />
+            {product.ImageFiles.length > 0 && <ProductCreationImagePreviews imageUrls={imageUrls} />}
             <div className="flex flex-col gap-y-2">
               <Button variant={"default"} type="submit" className="w-full text-xs h-8">
                 Create

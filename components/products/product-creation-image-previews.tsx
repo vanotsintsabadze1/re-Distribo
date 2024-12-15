@@ -1,37 +1,25 @@
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
-  images: File[];
+  imageUrls: string[];
 }
 
-export default function ProductCreationImagePreviews({ images }: Props) {
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const initialized = useRef(false);
+export default function ProductCreationImagePreviews({ imageUrls }: Props) {
+  const init = useRef(false);
 
   useEffect(() => {
-    if (initialized.current) {
-      return;
-    }
+    if (init.current) return;
 
-    images.forEach((image) => {
-      const url = URL.createObjectURL(image);
-      setImagePreviews((prev) => [...prev, url]);
-    });
+    console.log("amogicani", imageUrls);
 
-    initialized.current = true;
-
-    return () => {
-      imagePreviews.forEach((preview) => URL.revokeObjectURL(preview));
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
+    init.current = true;
+  }, []);
 
   return (
     <div className="flex gap-x-2 gap-y-1 flex-wrap">
-      {imagePreviews.map((preview, index) => (
-        <Image src={preview} key={index} alt="preview" width={40} height={40} />
+      {imageUrls.map((src, index) => (
+        <Image src={src} key={index} alt="preview" className="object-contain" width={40} height={40} />
       ))}
     </div>
   );

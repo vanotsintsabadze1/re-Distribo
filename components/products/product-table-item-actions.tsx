@@ -10,18 +10,20 @@ import { HttpStatusTypes, UserRole } from "@/config/constants";
 import { deleteProduct } from "@/scripts/actions/api/products/products";
 import toast from "react-hot-toast";
 import ConfirmationDialog from "../ui/confirmation-dialog";
+import ProductEditingDialog from "./product-editing-dialog";
 
 interface Props {
-  itemId: string;
+  product: Product;
 }
 
-export default function ProductTableItemActions({ itemId }: Props) {
+export default function ProductTableItemActions({ product }: Props) {
   const user = useContext(AuthenticationContext);
   const [confirmationModal, setConfirmationModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
   const router = useRouter();
 
   async function handleDelete() {
-    const res = await deleteProduct(itemId);
+    const res = await deleteProduct(product.id);
 
     if (res.type === HttpStatusTypes.Success) {
       router.refresh();
@@ -39,7 +41,8 @@ export default function ProductTableItemActions({ itemId }: Props) {
 
   return (
     <>
-      <ConfirmationDialog open={confirmationModal} setOpen={setConfirmationModal} callback={handleDelete} />
+      {confirmationModal && <ConfirmationDialog open={confirmationModal} setOpen={setConfirmationModal} callback={handleDelete} />}
+      {editModal && <ProductEditingDialog open={editModal} setOpen={setEditModal} product={product} images={product.images} />}
       {user?.role && user?.role.name === UserRole.Admin ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -49,7 +52,9 @@ export default function ProductTableItemActions({ itemId }: Props) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem className="text-xs cursor-pointer">Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEditModal(true)} className="text-xs cursor-pointer">
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setConfirmationModal(true)} className="text-xs text-red-600 cursor-pointer">
               Delete
