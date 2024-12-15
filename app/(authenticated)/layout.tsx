@@ -1,7 +1,7 @@
-import NavigationBar from "@/components/navigation/navigation-bar";
+import NavigationBar from "@/components/profile/profile-bar";
 import Sidebar from "@/components/ui/sidebar";
 
-export default function RootLayout({
+export default function AuthenticatedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
