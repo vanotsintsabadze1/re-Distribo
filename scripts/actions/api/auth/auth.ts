@@ -1,6 +1,6 @@
 "use server";
 
-import { axiosService } from "@/config/axiosConfiguration";
+import { axiosService, invalidateUserCache } from "@/config/axiosConfiguration";
 import { HttpStatusTypes } from "@/config/constants";
 import { axiosErrorHandler } from "@/scripts/helpers/axiosErrorHandler";
 import { responseValidator } from "@/scripts/helpers/responseValidator";
@@ -12,10 +12,14 @@ export async function getCurrentUser(): Promise<ResponseCheckerPayload<User | Re
   try {
     const res = await axiosService.get("/v1/users/me", {
       id: "getCurrentUser",
-      cache: false,
+      cache: {
+        ttl: 5 * 60 * 1000,
+      },
       requiresAuth: true,
       hasDefaultHeaders: true,
     });
+
+    console.log(res.cached);
 
     const validatedResponse = responseValidator<User>(res.status, res.data);
     return validatedResponse;
@@ -58,4 +62,5 @@ export async function login(payload: UserLoginRequest): Promise<ResponseCheckerP
 export async function logout() {
   const cookieStore = await cookies();
   cookieStore.delete("token");
+  await invalidateUserCache();
 }

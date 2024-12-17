@@ -1,13 +1,12 @@
 "use client";
 
-import { AuthenticationContext } from "@/context/AuthenticationContext";
-import { useContext } from "react";
+import { useUser } from "@/scripts/hooks/useUser";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Button } from "../ui/button";
 
 export default function ProfileForm() {
-  const user = useContext(AuthenticationContext);
+  const user = useUser();
 
   return (
     <form className="flex flex-col gap-y-4 w-full">

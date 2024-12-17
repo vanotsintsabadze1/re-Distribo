@@ -1,10 +1,12 @@
 "use client";
 
+import { useUser } from "@/scripts/hooks/useUser";
 import { useRouter } from "next/navigation";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function NavigationBar() {
   const router = useRouter();
+  const user = useUser();
 
   return (
     <section className="w-full">
@@ -12,7 +14,7 @@ export default function NavigationBar() {
         <button onClick={() => router.push("/profile")}>
           <Avatar>
             <AvatarImage src="" />
-            <AvatarFallback className="border border-black">V</AvatarFallback>
+            <AvatarFallback className="border border-black">{user?.email[0].toUpperCase()}</AvatarFallback>
           </Avatar>
         </button>
       </nav>
