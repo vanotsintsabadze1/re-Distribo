@@ -8,6 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useState } from "react";
 import ProductTableItemActions from "./product-table-item-actions";
 import ProductCreationDialog from "./product-creation-dialog";
+import { useUser } from "@/scripts/hooks/useUser";
+import { UserRole } from "@/config/constants";
 
 interface Props {
   products: Product[];
@@ -17,6 +19,7 @@ export default function ProductTable({ products }: Props) {
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
   const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const user = useUser()!;
 
   return (
     <>
@@ -32,9 +35,11 @@ export default function ProductTable({ products }: Props) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Button className="flex justify-center items-center gap-x-2 text-xs h-8" onClick={() => setOpen(true)}>
-              + Create Product
-            </Button>
+            {user.role.name !== UserRole.Employee && user.role.name !== UserRole.User && (
+              <Button className="flex justify-center items-center gap-x-2 text-xs h-8" onClick={() => setOpen(true)}>
+                + Create Product
+              </Button>
+            )}
           </div>
         </div>
         <Table>
