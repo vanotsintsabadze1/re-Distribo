@@ -68,3 +68,18 @@ export async function editProduct(id: string, formData: FormData) {
     return await axiosErrorHandler(error);
   }
 }
+
+export async function getProductById(id: string) {
+  try {
+    const res = await axiosService.get(`/v1/products/${id}`, {
+      requiresAuth: true,
+      cache: false,
+      hasDefaultHeaders: true,
+    });
+
+    const validatedResponse = responseValidator<Product>(res.status, res.data);
+    return validatedResponse;
+  } catch (error) {
+    return await axiosErrorHandler(error);
+  }
+}

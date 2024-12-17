@@ -11,7 +11,7 @@ export async function axiosErrorHandler(error: unknown): Promise<ResponseChecker
     title: "Unexpected error happened while sending a request",
     status: 500,
     detail: "Unexpected error happened while sending a request, debugging the application is mandatory",
-    code: "UnexpectedErrorWhileRequesting",
+    Code: "UnexpectedErrorWhileRequesting",
   };
 
   if (axiosError.response) {
@@ -47,7 +47,7 @@ export async function axiosErrorHandler(error: unknown): Promise<ResponseChecker
         title: axiosError.message,
         status: status ?? 500,
         detail: "",
-        code: "UnexpectedErrorWhileRequesting",
+        Code: "UnexpectedErrorWhileRequesting",
       },
     };
   }

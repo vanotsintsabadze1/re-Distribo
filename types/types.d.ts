@@ -76,3 +76,32 @@ interface CompanyCreationRequest {
   phone: string;
   email: string;
 }
+
+interface Order {
+  id: string;
+  createdAtUtc: string;
+  deliveryDateDeadline: string;
+  status: number;
+  company: {
+    id: string;
+    name: string;
+    address: string;
+    phone: string;
+    email: string;
+  };
+  items: {
+    id: string;
+    quantity: number;
+    price: number;
+    product: {
+      id: string;
+      name: string;
+      description: string;
+      price: number;
+      stock: number;
+      images: {
+        url: string;
+      }[];
+    };
+  }[];
+}
