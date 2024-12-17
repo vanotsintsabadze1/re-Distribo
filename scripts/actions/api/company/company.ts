@@ -6,7 +6,7 @@ import { responseValidator } from "@/scripts/helpers/responseValidator";
 
 export async function getCompany() {
   try {
-    const res = await axiosService.get("/v1/Company", {
+    const res = await axiosService.get("/v1/companies/me", {
       cache: false,
       requiresAuth: true,
       hasDefaultHeaders: true,

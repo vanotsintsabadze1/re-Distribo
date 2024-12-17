@@ -5,12 +5,15 @@ import { AtSign, Building2, IdCard, Phone, Pin } from "lucide-react";
 import { useContext } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { UserRole } from "@/config/constants";
 
 export default function ProfileCompanyCard() {
   const user = useContext(AuthenticationContext);
   const company = user?.company;
 
-  if (!company) {
+  if (!user) return null;
+
+  if (user?.role.name === UserRole.Admin || user?.role.name === UserRole.Employee) {
     return <></>;
   }
 
@@ -47,7 +50,7 @@ export default function ProfileCompanyCard() {
         ) : (
           <div className="flex justify-center items-center w-full flex-col gap-y-6">
             <span className="text-xs uppercase font-medium tracking-wider">No company information found</span>
-            <Button className="text-xs h-10">Create Company</Button>
+            <Button className="text-xs h-8">Create Company</Button>
           </div>
         )}
       </CardContent>
