@@ -9,7 +9,7 @@ export function useUser_USED_FOR_CONTEXT(trigger: number): User | null {
   async function fetcher() {
     try {
       const res = await getCurrentUser();
-      if (!("code" in res.data)) {
+      if (!("Code" in res.data)) {
         setUser(res.data as User);
       } else {
         setUser(null);

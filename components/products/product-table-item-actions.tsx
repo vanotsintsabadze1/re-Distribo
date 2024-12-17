@@ -1,14 +1,14 @@
 "use client";
 
-import { AuthenticationContext } from "@/context/AuthenticationContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Eye, MoreHorizontal } from "lucide-react";
-import { useContext, useState } from "react";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
 import { HttpStatusTypes, UserRole } from "@/config/constants";
 import { deleteProduct } from "@/scripts/actions/api/products/products";
+import { useUser } from "@/scripts/hooks/useUser";
+import { Eye, MoreHorizontal } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { Button } from "../ui/button";
 import ConfirmationDialog from "../ui/confirmation-dialog";
 import ProductEditingDialog from "./product-editing-dialog";
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function ProductTableItemActions({ product }: Props) {
-  const user = useContext(AuthenticationContext);
+  const user = useUser();
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const router = useRouter();
@@ -43,7 +43,14 @@ export default function ProductTableItemActions({ product }: Props) {
     <>
       {confirmationModal && <ConfirmationDialog open={confirmationModal} setOpen={setConfirmationModal} callback={handleDelete} />}
       {editModal && <ProductEditingDialog open={editModal} setOpen={setEditModal} product={product} images={product.images} />}
-      {user?.role && user?.role.name === UserRole.Admin ? (
+
+      <button
+        onClick={() => router.push(`/products/${product.id}`)}
+        className="p-1 rounded-md bg-gray-300 hover:bg-gray-400 duration-100 ease-in-out"
+      >
+        <Eye size={19} className="text-white" />
+      </button>
+      {user?.role.name && user?.role.name === UserRole.Admin && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -61,10 +68,6 @@ export default function ProductTableItemActions({ product }: Props) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      ) : (
-        <button className="p-1 rounded-md bg-gray-300 hover:bg-gray-400 duration-100 ease-in-out">
-          <Eye size={19} className="text-white" />
-        </button>
       )}
     </>
   );

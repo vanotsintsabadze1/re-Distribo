@@ -13,7 +13,7 @@ export default async function ProductPage() {
           <CardDescription>Here you can see all the products</CardDescription>
         </CardHeader>
         <CardContent>
-          {!("code" in products.data) ? (
+          {!("Code" in products.data) ? (
             <ProductTable products={products.data as Product[]} />
           ) : (
             <div className="w-full h-full text-xs uppercase font-medium tracking-wider flex items-center justify-center">Loading..</div>
