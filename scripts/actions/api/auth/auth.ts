@@ -19,8 +19,6 @@ export async function getCurrentUser(): Promise<ResponseCheckerPayload<User | Re
       hasDefaultHeaders: true,
     });
 
-    console.log(res.cached);
-
     const validatedResponse = responseValidator<User>(res.status, res.data);
     return validatedResponse;
   } catch (error) {

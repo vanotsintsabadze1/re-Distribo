@@ -20,7 +20,7 @@ interface ResponseError {
   status: number;
   detail: string;
   instance?: string;
-  code: string;
+  Code: string;
   traceId?: string;
 }
 
@@ -64,6 +64,13 @@ interface ProductCreationRequestSchema {
 
 interface Company {
   id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+}
+
+interface CompanyCreationRequest {
   name: string;
   address: string;
   phone: string;
