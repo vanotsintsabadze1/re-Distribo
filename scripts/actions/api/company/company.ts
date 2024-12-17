@@ -18,3 +18,18 @@ export async function getCompany() {
     return await axiosErrorHandler(error);
   }
 }
+
+export async function createCompany(payload: CompanyCreationRequest) {
+  try {
+    const res = await axiosService.post("/v1/companies", payload, {
+      cache: false,
+      requiresAuth: true,
+      hasDefaultHeaders: true,
+    });
+
+    const validatedResponse = responseValidator<Company>(res.status);
+    return validatedResponse;
+  } catch (error) {
+    return await axiosErrorHandler(error);
+  }
+}
