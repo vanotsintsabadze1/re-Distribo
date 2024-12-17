@@ -1,7 +1,12 @@
 "use client";
 
+import { HttpStatusTypes, UserRole } from "@/config/constants";
+import { createOrder } from "@/scripts/actions/api/orders/orders";
+import { useUser } from "@/scripts/hooks/useUser";
 import { ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Card, CardContent } from "../ui/card";
@@ -10,11 +15,15 @@ import { Label } from "../ui/label";
 
 interface Props {
   PRICE_PER_KG: number;
+  productId: string;
+  stock: number;
 }
 
-export default function SingleProductForm({ PRICE_PER_KG }: Props) {
+export default function SingleProductForm({ PRICE_PER_KG, productId, stock }: Props) {
   const [quantity, setQuantity] = useState<string>("1");
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const user = useUser();
+  const router = useRouter();
 
   function handleQuantityChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
@@ -26,6 +35,41 @@ export default function SingleProductForm({ PRICE_PER_KG }: Props) {
   }
 
   const totalPrice = isNaN(parseInt(quantity)) ? 0 : (parseInt(quantity) * PRICE_PER_KG).toFixed(2);
+
+  async function handleSubmitOrder() {
+    if (isNaN(parseInt(quantity))) {
+      toast.error("Please enter a valid quantity.");
+      return;
+    }
+
+    if (!date) {
+      toast.error("Please select a delivery date.");
+      return;
+    }
+
+    if (parseInt(quantity) <= 0) {
+      toast.error("Quantity must be greater than 0.");
+      setQuantity("1");
+      return;
+    }
+
+    if (parseInt(quantity) > stock) {
+      toast.error("Not enough stock available.");
+      return;
+    }
+
+    const res = await createOrder(date, { productId: productId, quantity: parseInt(quantity) });
+
+    console.log(res.data);
+
+    if (res.type === HttpStatusTypes.Success) {
+      toast.success("Order placed successfully.");
+      router.push("/products");
+      return;
+    }
+
+    toast.error("Failed to place order. Please try again or contact support.");
+  }
 
   return (
     <>
@@ -40,6 +84,7 @@ export default function SingleProductForm({ PRICE_PER_KG }: Props) {
           inputMode="numeric"
           min="0"
           step="0.5"
+          max={stock}
           value={quantity}
           onChange={handleQuantityChange}
           className="w-24 text-xs"
@@ -59,7 +104,10 @@ export default function SingleProductForm({ PRICE_PER_KG }: Props) {
           </div>
         </CardContent>
       </Card>
-      <Button className="w-full mb-2">
+      {user?.role.name === UserRole.Admin && (
+        <span className="text-red-600 font-medium text-[.6rem] uppercase tracking-wide">You are a staff member, you can not place an order.</span>
+      )}
+      <Button onClick={handleSubmitOrder} className="w-full mb-2 mt-1" disabled={user?.role.name === UserRole.Admin}>
         <ShoppingCart className="w-4 h-4" />
         Order
       </Button>

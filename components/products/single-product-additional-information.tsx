@@ -6,6 +6,8 @@ interface Props {
   STOCK_AMOUNT: number;
   STORAGE_TEMPERATURE: number;
   HUMIDITY_LEVEL: number;
+  name: string;
+  description: string;
 }
 
 export default function SingleProductAdditionalInformation({
@@ -14,11 +16,13 @@ export default function SingleProductAdditionalInformation({
   STOCK_AMOUNT,
   STORAGE_TEMPERATURE,
   HUMIDITY_LEVEL,
+  name,
+  description,
 }: Props) {
   return (
     <>
-      <h1 className="text-2xl font-bold mb-2">Fresh Organic Lettuce</h1>
-      <p className="text-xs text-gray-600 mb-4">Farm-fresh, crisp, and nutritious lettuce perfect for salads and sandwiches.</p>
+      <h1 className="text-2xl font-bold mb-2">{name}</h1>
+      <p className="text-xs text-gray-600 mb-4">{description}</p>
       <div className="flex items-center mb-4">
         <span className="text-xl font-bold mr-2">${PRICE_PER_KG.toFixed(2)}</span>
         <span className="text-xs text-gray-600">per kg</span>
