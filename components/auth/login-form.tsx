@@ -79,6 +79,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   id="email"
                   placeholder="m@example.com"
                   error={errorSubjects.email}
+                  className="text-xs"
                 />
               </div>
               <div className="grid gap-1">
@@ -95,6 +96,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   id="password"
                   type="password"
                   error={errorSubjects.password}
+                  placeholder="Enter your password.."
+                  className="text-xs"
                 />
               </div>
               <Button type="submit" className="w-full">
