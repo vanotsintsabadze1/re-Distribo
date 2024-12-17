@@ -1,14 +1,13 @@
 "use client";
 
-import { AuthenticationContext } from "@/context/AuthenticationContext";
+import { UserRole } from "@/config/constants";
+import { useUser } from "@/scripts/hooks/useUser";
 import { AtSign, Building2, IdCard, Phone, Pin } from "lucide-react";
-import { useContext } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { UserRole } from "@/config/constants";
 
 export default function ProfileCompanyCard() {
-  const user = useContext(AuthenticationContext);
+  const user = useUser();
   const company = user?.company;
 
   if (!user) return null;

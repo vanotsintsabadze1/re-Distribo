@@ -6,13 +6,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { userSchema } from "@/types/validators/userValidators";
 import { validationErrorAssigner } from "@/scripts/helpers/validationErrorAssigner";
 import { login } from "@/scripts/actions/api/auth/auth";
 import { HttpStatusTypes } from "@/config/constants";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { AuthenticationContext } from "@/context/AuthenticationContext";
+import { invalidateUserCache } from "@/config/axiosConfiguration";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [userDetails, setUserDetails] = useState<UserLoginRequest>({
@@ -24,6 +26,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     password: "",
   });
   const router = useRouter();
+  const authCtx = useContext(AuthenticationContext);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -39,6 +42,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     const res = await login(userDetails);
 
     if (res.type === HttpStatusTypes.Success) {
+      await invalidateUserCache();
+      authCtx.refreshUser();
       toast.success("Welcome back!");
       router.refresh();
       return;
