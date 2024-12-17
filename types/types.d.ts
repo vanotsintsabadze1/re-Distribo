@@ -8,7 +8,7 @@ interface User {
     address: string;
     phone: string;
     email: string;
-  };
+  } | null;
   role: {
     name: "RootUser" | "Employee" | "Admin";
   };
@@ -20,7 +20,7 @@ interface ResponseError {
   status: number;
   detail: string;
   instance?: string;
-  code?: string;
+  code: string;
   traceId?: string;
 }
 
@@ -60,4 +60,12 @@ interface ProductCreationRequestSchema {
   Price: string;
   Stock: string;
   ImageFiles: string;
+}
+
+interface Company {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
 }

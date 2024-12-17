@@ -10,11 +10,9 @@ const domain = process.env.NODE_ENV === "production" ? process.env.DOMAIN : "loc
 
 export async function getCurrentUser(): Promise<ResponseCheckerPayload<User | ResponseError>> {
   try {
-    const res = await axiosService.get("/v1/User/GetCurrentUser", {
+    const res = await axiosService.get("/v1/users/me", {
       id: "getCurrentUser",
-      cache: {
-        ttl: 1000 * 60 * 5,
-      },
+      cache: false,
       requiresAuth: true,
       hasDefaultHeaders: true,
     });
@@ -29,7 +27,7 @@ export async function getCurrentUser(): Promise<ResponseCheckerPayload<User | Re
 export async function login(payload: UserLoginRequest): Promise<ResponseCheckerPayload<string | ResponseError>> {
   try {
     const res = await axiosService.post(
-      "/v1/User/Login",
+      "/v1/users/login",
       { email: payload.email, password: payload.password },
       {
         hasDefaultHeaders: true,

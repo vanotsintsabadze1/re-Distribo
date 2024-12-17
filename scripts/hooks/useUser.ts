@@ -22,6 +22,10 @@ export function useUser(): User | null {
     }
 
     fetcher();
+
+    return () => {
+      setUser(null);
+    };
   }, []); //
 
   return user;

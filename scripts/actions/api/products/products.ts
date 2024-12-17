@@ -6,7 +6,7 @@ import { responseValidator } from "@/scripts/helpers/responseValidator";
 
 export async function getProducts() {
   try {
-    const res = await axiosService.get("/v1/Product", {
+    const res = await axiosService.get("/v1/products", {
       requiresAuth: true,
       cache: false,
       hasDefaultHeaders: true,
@@ -21,7 +21,7 @@ export async function getProducts() {
 
 export async function deleteProduct(id: string) {
   try {
-    const res = await axiosService.delete(`/v1/Product/${id}`, {
+    const res = await axiosService.delete(`/v1/products/${id}`, {
       requiresAuth: true,
       cache: false,
       hasDefaultHeaders: true,
@@ -37,7 +37,7 @@ export async function deleteProduct(id: string) {
 
 export async function createProduct(formData: FormData) {
   try {
-    const res = await axiosService.post("/v1/Product", formData, {
+    const res = await axiosService.post("/v1/products", formData, {
       requiresAuth: true,
       cache: false,
       headers: {
@@ -54,7 +54,7 @@ export async function createProduct(formData: FormData) {
 
 export async function editProduct(id: string, formData: FormData) {
   try {
-    const res = await axiosService.put(`/v1/Product/${id}`, formData, {
+    const res = await axiosService.put(`/v1/products/${id}`, formData, {
       cache: false,
       requiresAuth: true,
       headers: {

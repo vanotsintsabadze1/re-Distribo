@@ -11,8 +11,8 @@ const instance = axios.create({
 
 export const axiosService = setupCache(instance);
 
-export async function invalidateCache(id: string) {
-  axiosService.storage.remove(id);
+export async function invalidateCache() {
+  await axiosService.storage.remove("getCurrentUser");
 }
 
 declare module "axios" {
