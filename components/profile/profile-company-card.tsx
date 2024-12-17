@@ -30,24 +30,24 @@ export default function ProfileCompanyCard() {
         <CardContent className="flex min-w-[36rem] justify-between">
           {company ? (
             <div className="flex flex-col gap-y-2 text-xs">
-              <div>
-                <IdCard size={12} className="text-gray-400" />
+              <div className="flex items-center gap-x-2">
+                <IdCard size={15} className="text-gray-400" />
                 <span>{company.id}</span>
               </div>
-              <div>
-                <Building2 size={12} className="text-gray-400" />
+              <div className="flex items-center gap-x-2">
+                <Building2 size={15} className="text-gray-400" />
                 <span>{company.name}</span>
               </div>
-              <div>
-                <AtSign size={12} className="text-gray-400" />
+              <div className="flex items-center gap-x-2">
+                <AtSign size={15} className="text-gray-400" />
                 <span>{company.email}</span>
               </div>
-              <div>
-                <Pin size={12} className="text-gray-400" />
+              <div className="flex items-center gap-x-2">
+                <Pin size={15} className="text-gray-400" />
                 <span>{company.address}</span>
               </div>
-              <div>
-                <Phone size={12} className="text-gray-400" />
+              <div className="flex items-center gap-x-2">
+                <Phone size={15} className="text-gray-400" />
                 <span>{company.phone}</span>
               </div>
             </div>
