@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import ProductCreationFormFields from "./product-creation-form-fields";
 import CustomDialog from "../ui/custom-dialog";
 import ProductCreationImagePreviews from "./product-creation-image-previews";
+import { Spinner } from "../ui/spinner";
 
 interface Props {
   product: Product;
@@ -43,6 +44,7 @@ export default function ProductEditingDialog({ product: initProduct, open, setOp
     Stock: "",
     ImageFiles: "",
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -83,6 +85,8 @@ export default function ProductEditingDialog({ product: initProduct, open, setOp
       return;
     }
 
+    setLoading(true);
+
     const formData = new FormData(formRef.current!);
     const res = await editProduct(initProduct.id, formData);
 
@@ -91,20 +95,24 @@ export default function ProductEditingDialog({ product: initProduct, open, setOp
       toast.success("Product edited successfully");
       router.refresh();
       setOpen(false);
+      setLoading(false);
       return;
     }
+
     if (res.type === HttpStatusTypes.ClientError) {
       if (res.status === HttpStatusCode.Unauthorized) {
         toast.error("Unauthorized to edit a product");
-        return;
       }
 
       if (res.status === HttpStatusCode.BadRequest) {
         toast.error("Bad request. Please check your data");
-        return;
       }
+
+      setLoading(false);
+      return;
     }
 
+    setLoading(false);
     toast.error("Something went wrong. Please contact support");
   }
 
@@ -137,7 +145,7 @@ export default function ProductEditingDialog({ product: initProduct, open, setOp
             )}
             <div className="flex flex-col gap-y-2">
               <Button variant={"default"} type="submit" className="w-full text-xs h-8">
-                Edit
+                {loading ? <Spinner /> : "Edit Product"}
               </Button>
               <Button onClick={handleCancel} variant={"outline"} className="w-full text-xs h-8">
                 Cancel

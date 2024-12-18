@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import CustomDialog from "../ui/custom-dialog";
 import ProductCreationFormFields from "./product-creation-form-fields";
 import ProductCreationImagePreviews from "./product-creation-image-previews";
+import { Spinner } from "../ui/spinner";
 
 interface Props {
   open: boolean;
@@ -28,6 +29,7 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   // Since our custom approach needs every property to be a string we need to create a new instance.
   // While a better approach is to not end up in this situation, this is a quick and probably the only time, except editing where we're going to need it.
@@ -50,6 +52,8 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
       return;
     }
 
+    setLoading(true);
+
     const formData = new FormData(formRef.current!);
 
     const res = await createProduct(formData);
@@ -59,15 +63,18 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
       toast.success("Product created successfully");
       router.refresh();
       setOpen(false);
+      setLoading(false);
       return;
     }
 
     if (res.type === HttpStatusTypes.ClientError) {
       toast.error("Unauthorized to create a product");
       console.log(res.data);
+      setLoading(false);
       return;
     }
 
+    setLoading(false);
     toast.error("Something went wrong. Please contact support");
   }
 
@@ -94,7 +101,7 @@ export default function ProductCreationDialog({ open, setOpen }: Props) {
             )}
             <div className="flex flex-col gap-y-2">
               <Button variant={"default"} type="submit" className="w-full text-xs h-8">
-                Create
+                {loading ? <Spinner /> : "Create Product"}
               </Button>
               <Button onClick={handleCancel} variant={"outline"} className="w-full text-xs h-8">
                 Cancel

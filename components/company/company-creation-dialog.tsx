@@ -13,6 +13,7 @@ import { invalidateUserCache } from "@/config/axiosConfiguration";
 import { AuthenticationContext } from "@/context/AuthenticationContext";
 import toast from "react-hot-toast";
 import CustomDialog from "../ui/custom-dialog";
+import { Spinner } from "../ui/spinner";
 
 interface Props {
   open: boolean;
@@ -34,6 +35,7 @@ export default function CompanyCreationDialog({ open, setOpen }: Props) {
   });
   const router = useRouter();
   const authCtx = useContext(AuthenticationContext);
+  const [loading, setLoading] = useState(false);
 
   async function handleCreateCompany(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -46,6 +48,7 @@ export default function CompanyCreationDialog({ open, setOpen }: Props) {
       return;
     }
 
+    setLoading(true);
     const res = await createCompany(company);
 
     if (res.type === HttpStatusTypes.Success) {
@@ -53,6 +56,7 @@ export default function CompanyCreationDialog({ open, setOpen }: Props) {
       authCtx.refreshUser();
 
       setOpen(false);
+      setLoading(false);
       toast.success("Company created successfully");
       router.refresh();
 
@@ -65,29 +69,31 @@ export default function CompanyCreationDialog({ open, setOpen }: Props) {
           switch (res.data.Code) {
             case "NameIsTaken":
               toast.error("Company name is already taken");
+              setLoading(false);
               return;
             case "EmailIsTaken":
               toast.error("Company email is already taken");
+              setLoading(false);
               return;
             default:
               toast.error("Company already exists with these credentials");
+              setLoading(false);
               return;
           }
         }
-        return;
       }
 
       if (res.status === HttpStatusCode.Unauthorized) {
         toast.error("Unauthorized");
-        return;
       }
 
-      console.log(res.data);
       toast.error("Invalid data, please check your inputs");
+      setLoading(false);
       return;
     }
 
     toast.error("Something went wrong, please contact support");
+    setLoading(false);
   }
 
   return (
@@ -133,7 +139,7 @@ export default function CompanyCreationDialog({ open, setOpen }: Props) {
             </div>
             <div className="w-full flex items-center flex-col gap-y-4 justify-center mt-2">
               <Button type="submit" variant={"default"} className="text-xs h-8 w-full">
-                Create
+                {loading ? <Spinner /> : "Create Company"}
               </Button>
               <Button type="button" onClick={() => setOpen(false)} variant={"ghost"} className="text-xs h-8 w-full border border-black">
                 Cancel

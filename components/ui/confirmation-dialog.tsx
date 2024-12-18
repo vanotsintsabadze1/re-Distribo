@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomDialog from "./custom-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
 import { Button } from "./button";
+import { Spinner } from "./spinner";
 
 interface Props {
   open: boolean;
@@ -10,8 +11,11 @@ interface Props {
 }
 
 export default function ConfirmationDialog({ open, setOpen, callback }: Props) {
+  const [loading, setLoading] = useState(false);
   async function handleConfirm() {
+    setLoading(true);
     await callback();
+    setLoading(false);
     setOpen(false);
   }
 
@@ -26,8 +30,8 @@ export default function ConfirmationDialog({ open, setOpen, callback }: Props) {
           <CardDescription className="text-xs">This action cannot be undone.</CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center items-center gap-x-4">
-          <Button variant={"default"} onClick={handleConfirm} className="text-xs h-8">
-            Submit
+          <Button variant={"default"} onClick={handleConfirm} className="text-xs h-8 min-w-[5rem]">
+            {loading ? <Spinner /> : "Confirm"}
           </Button>
           <Button variant={"outline"} onClick={handleCancel} className="text-xs h-8">
             Cancel

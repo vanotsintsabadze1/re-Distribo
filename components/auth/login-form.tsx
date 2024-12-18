@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { AuthenticationContext } from "@/context/AuthenticationContext";
 import { invalidateUserCache } from "@/config/axiosConfiguration";
+import { Spinner } from "../ui/spinner";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [userDetails, setUserDetails] = useState<UserLoginRequest>({
@@ -25,6 +26,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const authCtx = useContext(AuthenticationContext);
 
@@ -39,6 +41,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       return;
     }
 
+    setLoading(true);
+
     const res = await login(userDetails);
 
     if (res.type === HttpStatusTypes.Success) {
@@ -46,16 +50,19 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       authCtx.refreshUser();
       toast.success("Welcome back!");
       router.refresh();
+      setLoading(false);
       return;
     }
 
     if (res.type === HttpStatusTypes.ClientError) {
       toast.error("Invalid email or password");
+      setLoading(false);
       return;
     }
 
     if (res.type === HttpStatusTypes.InternalServerError) {
       toast.error("Something went wrong. Please contact support");
+      setLoading(false);
       return;
     }
   }
@@ -100,10 +107,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   className="text-xs"
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" className="w-full h-8 text-xs">
+                {loading ? <Spinner /> : "Login"}
               </Button>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full text-xs h-8">
                 Login with Google
               </Button>
             </div>

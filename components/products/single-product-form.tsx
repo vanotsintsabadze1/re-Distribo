@@ -12,6 +12,7 @@ import { Calendar } from "../ui/calendar";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Spinner } from "../ui/spinner";
 
 interface Props {
   PRICE_PER_KG: number;
@@ -21,6 +22,7 @@ interface Props {
 
 export default function SingleProductForm({ PRICE_PER_KG, productId, stock }: Props) {
   const [quantity, setQuantity] = useState<string>("1");
+  const [loading, setLoading] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const user = useUser();
   const router = useRouter();
@@ -58,6 +60,8 @@ export default function SingleProductForm({ PRICE_PER_KG, productId, stock }: Pr
       return;
     }
 
+    setLoading(true);
+
     const res = await createOrder(date, { productId: productId, quantity: parseInt(quantity) });
 
     console.log(res.data);
@@ -65,10 +69,12 @@ export default function SingleProductForm({ PRICE_PER_KG, productId, stock }: Pr
     if (res.type === HttpStatusTypes.Success) {
       toast.success("Order placed successfully.");
       router.push("/products");
+      setLoading(false);
       return;
     }
 
     toast.error("Failed to place order. Please try again or contact support.");
+    setLoading(false);
   }
 
   return (
@@ -109,7 +115,7 @@ export default function SingleProductForm({ PRICE_PER_KG, productId, stock }: Pr
       )}
       <Button onClick={handleSubmitOrder} className="w-full mb-2 mt-1" disabled={user?.role.name === UserRole.Admin}>
         <ShoppingCart className="w-4 h-4" />
-        Order
+        {loading ? <Spinner /> : "Place Order"}
       </Button>
     </>
   );
